@@ -1,0 +1,4 @@
+// Any device that does not fit any of the below platforms 
+".ad": {
+    //top:0
+}
