@@ -31,7 +31,7 @@ createNend = (obj)->
   # 受信エラー通知
   adView.addEventListener "error", (e) ->
     unless ENV_PRODUCTION then Ti.API.debug "nendエラー #{e}"
-    Ti.API.error "nend error #{JSON.stringify e}"
+    Ti.API.error "nend エラー #{JSON.stringify e}"
     Ti.API.debug "nendエラー #{e}"
     makeAdmob obj,adView
   # クリック通知
