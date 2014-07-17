@@ -8,6 +8,7 @@ makeAdmob = (obj,tmpadview)->
   $.adview.remove tmpadview
   Admob = require("ti.admob")
   obj.publisherId ?= Alloy.CFG.publisherId
+  unless ENV_PRODUCTION then Ti.API.debug "obj.publisherId #{obj.publisherId}"
   admobview = Admob.createView obj
   admobview.addEventListener "didReceiveAd", (e) =>
     Ti.API.debug "didReceiveAd"
