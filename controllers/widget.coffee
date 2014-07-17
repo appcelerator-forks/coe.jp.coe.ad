@@ -5,11 +5,11 @@ unless ENV_PRODUCTION then Ti.API.debug JSON.stringify args
 $.adview.applyProperties args
 
 makeAdmob = (obj,tmpadview)->
-  unless ENV_PRODUCTION then Ti.API.debug "makeAdmob"
+  Ti.API.debug "makeAdmob"
   $.adview.remove tmpadview
   Admob = require("ti.admob")
   obj.publisherId ?= Alloy.CFG.publisherId
-  unless ENV_PRODUCTION then Ti.API.debug "obj.publisherId #{obj.publisherId}"
+  Ti.API.debug "obj.publisherId #{obj.publisherId}"
   admobview = Admob.createView obj
   admobview.addEventListener "didReceiveAd", (e) =>
     Ti.API.debug "didReceiveAd"
@@ -32,6 +32,7 @@ createNend = (obj)->
   adView.addEventListener "error", (e) ->
     unless ENV_PRODUCTION then Ti.API.debug "nendエラー #{e}"
     Ti.API.error "nend error #{JSON.stringify e}"
+    Ti.API.debug "nendエラー #{e}"
     makeAdmob obj,adView
   # クリック通知
   adView.addEventListener "click", (e) ->
