@@ -4,15 +4,19 @@ args = arguments[0] || {}
 unless ENV_PRODUCTION then Ti.API.debug JSON.stringify args
 $.adview.applyProperties args
 
-makeAdmob = (obj,tmpadview)->
-  Ti.API.debug "makeAdmob"
-  $.adview.remove tmpadview
+makeAdmobView = (obj)->
   Admob = require("ti.admob")
   obj.publisherId ?= Alloy.CFG.publisherId
   Ti.API.debug "obj.publisherId #{obj.publisherId}"
+  obj.kindAd = if Alloy.isTablet then 1 else 0
   admobview = Admob.createView obj
   admobview.addEventListener "didReceiveAd", (e) =>
     Ti.API.debug "didReceiveAd"
+  admobview
+makeAdmob = (obj,tmpadview)->
+  Ti.API.debug "makeAdmob"
+  $.adview.remove tmpadview
+  admobview = makeAdmobView obj
   $.adview.add admobview
 
 
@@ -117,16 +121,7 @@ exports.init = (obj,phonead=off)->
       $.adview.add tmpadview
       #makeAdmob()
     else if Ti.Android?
-      Admob = require("ti.admob")
-      # then create an adMob view
-      obj.kindAd = if Alloy.isTablet then 1 else 0
-        
-      adview = Admob.createView obj
-      #listener for adReceived
-      adview.addEventListener Admob.AD_RECEIVED, ->
-  
-      #listener for adNotReceived
-      adview.addEventListener Admob.AD_NOT_RECEIVED, ->
+      adview = makeAdmobView obj
         
       $.adview.add adview
   obj
