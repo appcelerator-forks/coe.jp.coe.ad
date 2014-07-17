@@ -5,6 +5,7 @@ unless ENV_PRODUCTION then Ti.API.debug JSON.stringify args
 $.adview.applyProperties args
 
 makeAdmob = (obj,tmpadview)->
+  unless ENV_PRODUCTION then Ti.API.debug "makeAdmob"
   $.adview.remove tmpadview
   Admob = require("ti.admob")
   obj.publisherId ?= Alloy.CFG.publisherId
@@ -29,6 +30,7 @@ createNend = (obj)->
   
   # 受信エラー通知
   adView.addEventListener "error", (e) ->
+    unless ENV_PRODUCTION then Ti.API.debug "nendエラー #{e}"
     Ti.API.error "nend error #{JSON.stringify e}"
     makeAdmob obj,adView
   # クリック通知
@@ -86,7 +88,6 @@ exports.init = (obj,phonead=off)->
   adview = null
   
   #日本だったらnend AndroidでタブレットだったらAdmob
-  unless ENV_PRODUCTION then Ti.API.debug "おっけー！#{Titanium.Locale.getCurrentCountry()}"
   if Titanium.Locale.getCurrentCountry() is "JP" and !(OS_ANDROID and is_tablet)
     $.adview.add createNend obj
   else
