@@ -74,7 +74,7 @@ exports.setBottom = ->
 exports.setTop = ->
   $.adview.top = 0
 exports.init = (obj,phonead=off)->
-  is_tablet =  Alloy.isTablet #Ti.Platform.displayCaps.platformWidth >= Alloy.CFG.tablet.width and Ti.Platform.displayCaps.platformHeight >= Alloy.CFG.tablet.width #and !phonead
+  is_tablet =  Alloy.isTablet
   obj ?=
     #広告
     if is_tablet
@@ -83,8 +83,8 @@ exports.init = (obj,phonead=off)->
       _.extend Alloy.CFG.phone,Alloy.CFG.ad_phone
 
     #obj.width = $.adview.width
-  $.adview.height = obj.height
-  $.adview.width = obj.width
+  $.adview.height = if Alloy.isTablet then 90 else 50 #obj.height
+  $.adview.width = if Alloy.isTablet then 720 else 320 #obj.width
   unless ENV_PRODUCTION then Ti.API.debug "2:#{JSON.stringify $.adview}"
 
   # $.adview.bottom = obj.bottom if obj.bottom?
