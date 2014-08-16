@@ -1,7 +1,6 @@
 ###*
 ###
 args = arguments[0] || {}
-unless ENV_PRODUCTION then Ti.API.debug JSON.stringify args
 $.adview.applyProperties args
 
 makeAdmobView = (obj)->
@@ -35,7 +34,6 @@ createNend = (obj)->
   # 受信エラー通知
   adView.addEventListener "error", (e) ->
     unless ENV_PRODUCTION then Ti.API.debug "nendエラー #{e}"
-    Ti.API.error "nend エラー #{JSON.stringify e}"
     Ti.API.debug "nendエラー #{e}"
     makeAdmob obj,adView
   # クリック通知
@@ -85,7 +83,6 @@ exports.init = (obj,phonead=off)->
     #obj.width = $.adview.width
   $.adview.height = if Alloy.isTablet then 90 else 50 #obj.height
   $.adview.width = if Alloy.isTablet then 720 else 320 #obj.width
-  unless ENV_PRODUCTION then Ti.API.debug "2:#{JSON.stringify $.adview}"
 
   # $.adview.bottom = obj.bottom if obj.bottom?
   # $.adview.top = obj.top if obj.top?
