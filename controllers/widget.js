@@ -75,7 +75,7 @@ exports.setTop = function() {
 };
 
 exports.init = function(obj, phonead) {
-  var adview, is_tablet, tmpadview,
+  var adview, is_tablet, tmpadview, _ref,
     _this = this;
   if (phonead == null) {
     phonead = false;
@@ -86,7 +86,7 @@ exports.init = function(obj, phonead) {
   }
   $.adview.height = Alloy.isTablet ? 90 : 50;
   $.adview.width = Alloy.isTablet ? 720 : 320;
-  if (Alloy.CFG.ad.hide) {
+  if ((_ref = Alloy.CFG.ad) != null ? _ref.hide : void 0) {
     return obj;
   }
   adview = null;
