@@ -83,7 +83,7 @@ exports.init = (obj,phonead=off)->
     #obj.width = $.adview.width
   $.adview.height = if Alloy.isTablet then 90 else 50 #obj.height
   $.adview.width = if Alloy.isTablet then 720 else 320 #obj.width
-
+  return obj if Alloy.CFG.ad.hide
   # $.adview.bottom = obj.bottom if obj.bottom?
   # $.adview.top = obj.top if obj.top?
   #obj.width = $.adview.width
