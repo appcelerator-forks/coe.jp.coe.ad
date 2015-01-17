@@ -90,7 +90,7 @@ exports.init = (obj,phonead=off)->
   adview = null
   
   #日本だったらnend AndroidでタブレットだったらAdmob
-  if Titanium.Locale.getCurrentCountry() is "JP" and !(OS_ANDROID and is_tablet)
+  if no #Titanium.Locale.getCurrentCountry() is "JP" and !(OS_ANDROID and is_tablet)
     $.adview.add createNend obj
   else
     #iOSだったらiAdとadmob
