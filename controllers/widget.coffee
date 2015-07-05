@@ -3,20 +3,40 @@
 args = arguments[0] || {}
 $.adview.applyProperties args
 
+TAG = "jp.coe.ad"
+
 makeAdmobView = (obj)->
   Admob = require("ti.admob")
-  obj.publisherId ?= Alloy.CFG.publisherId
-  Ti.API.debug "obj.publisherId #{obj.publisherId}"
-  obj.kindAd = if Alloy.isTablet then 1 else 0
-  admobview = Admob.createView obj
-  admobview.addEventListener "didReceiveAd", (e) =>
-    Ti.API.debug "didReceiveAd"
-  admobview
+  obj.adUnitId ?= Alloy.CFG.publisherId
+  Ti.API.debug "obj.publisherId #{obj.adUnitId}"
+  # obj.testDevices = [Admob.SIMULATOR_ID]
+  console.debug "#{TAG} "+JSON.stringify obj 
+  ad = Admob.createView obj
+  ad.addEventListener 'didReceiveAd', ->
+    console.debug 'Did receive ad!'
+    return
+  ad.addEventListener 'didFailToReceiveAd', ->
+    console.debug 'Failed to receive ad!'
+    return
+  ad.addEventListener 'willPresentScreen', ->
+    console.debug 'Presenting screen!'
+    return
+  ad.addEventListener 'willDismissScreen', ->
+    console.debug 'Dismissing screen!'
+    return
+  ad.addEventListener 'didDismissScreen', ->
+    console.debug 'Dismissed screen!'
+    return
+  ad.addEventListener 'willLeaveApplication', ->
+    console.debug 'Leaving the app!'
+    return
+  ad
 makeAdmob = (obj,tmpadview)->
   Ti.API.debug "makeAdmob"
-  $.adview.remove tmpadview
+  $.adview.remove tmpadview if tmpadview?
   admobview = makeAdmobView obj
   $.adview.add admobview
+
 
 
 createNend = (obj)->
@@ -39,25 +59,7 @@ createNend = (obj)->
   # クリック通知
   adView.addEventListener "click", (e) ->
     Ti.API.info "nend click"
-#   
-  # btnLayout = Ti.UI.createView(layout: "horizontal")
-#   
-  # # 広告リロード停止ボタン
-  # pauseBtn = Ti.UI.createButton(
-    # title: "pause"
-    # width: "50%"
-  # )
-  # pauseBtn.addEventListener "click", (e) ->
-    # adView.pause()
-#   
-#   
-  # # 広告リロード再開ボタン
-  # resumeBtn = Ti.UI.createButton(
-    # title: "resume"
-    # width: "50%"
-  # )
-  # resumeBtn.addEventListener "click", (e) ->
-    # adView.resume()
+
   adView
 
 ###*
@@ -97,26 +99,12 @@ exports.init = (obj,phonead=off)->
     if Ti.UI.iOS?
       tmpadview = Ti.UI.iOS.createAdView
         zIndex: 1000
-      # makeAdmob = ->
-        # #$.adview.remove tmpadview
-        # $.adview.remove tmpadview
-        # Admob = require("ti.admob")
-#       
-        # admobview = Admob.createView obj
-        # admobview.addEventListener "didReceiveAd", (e) =>
-          # Ti.API.debug "didReceiveAd"
-        # $.adview.add admobview
         
-      tmpadview.addEventListener 'error', (e)=> 
+      tmpadview.addEventListener 'error', (e)-> 
         Ti.API.error "AdView error"
         makeAdmob(obj,tmpadview)
 
-      tmpadview.addEventListener 'action', (e)=> 
-        Ti.API.debug "action"
-        makeAdmob(obj,tmpadview)
-        
       $.adview.add tmpadview
-      #makeAdmob()
     else if Ti.Android?
       adview = makeAdmobView obj
         
