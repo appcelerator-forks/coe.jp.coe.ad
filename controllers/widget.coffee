@@ -1,11 +1,15 @@
 ###*
+@requires ti.admob
+@requires net.nend
 ###
 args = arguments[0] || {}
 $.adview.applyProperties args
 
-TAG = "jp.coe.ad"
+TAG = "jp.coe.ad "
+
 
 makeAdmobView = (obj)->
+  console.log "#{TAG} makeAdmobView"
   Admob = require("ti.admob")
   obj.adUnitId ?= Alloy.CFG.publisherId
   Ti.API.debug "obj.publisherId #{obj.adUnitId}"
@@ -32,7 +36,7 @@ makeAdmobView = (obj)->
     return
   ad
 makeAdmob = (obj,tmpadview)->
-  Ti.API.debug "makeAdmob"
+  console.log "#{TAG} makeAdmob"
   $.adview.remove tmpadview if tmpadview?
   admobview = makeAdmobView obj
   $.adview.add admobview
@@ -40,6 +44,7 @@ makeAdmob = (obj,tmpadview)->
 
 
 createNend = (obj)->
+  console.log "#{TAG} createNend"
   ad = require("net.nend")
   # adView = ad.createView obj
   if obj.nendId? then obj.apiKey = obj.nendId
@@ -73,7 +78,8 @@ exports.setBottom = ->
   $.adview.bottom = 0
 exports.setTop = ->
   $.adview.top = 0
-exports.init = (obj,phonead=off)->
+exports.init = (obj,isAd=on)->
+  console.log "#{TAG} init"
   is_tablet =  Alloy.isTablet
   obj ?=
     #広告
@@ -82,10 +88,13 @@ exports.init = (obj,phonead=off)->
     else
       _.extend Alloy.CFG.phone,Alloy.CFG.ad_phone
 
-    #obj.width = $.adview.width
+    #obj.width = $.adview.width]
+  # unless isAd
+  #   $.adview.height = 0 
+  #   $.adview.width = 0 
+  #   return obj 
   $.adview.height = if Alloy.isTablet then 90 else 50 #obj.height
   $.adview.width = if Alloy.isTablet then 720 else 320 #obj.width
-  return obj if Alloy.CFG.ad?.hide
   # $.adview.bottom = obj.bottom if obj.bottom?
   # $.adview.top = obj.top if obj.top?
   #obj.width = $.adview.width
