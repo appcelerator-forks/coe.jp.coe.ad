@@ -3,11 +3,11 @@
 	"name": "jp.coe.ad",
 	"description" : "",
 	"author": "",
-	"version": "1.7.1",
-	"copyright":"Copyright (c) 2012",
+	"version": "2.0.0",
+	"copyright":"Copyright (c) 2015",
 	"license":"Public Domain",
 	"min-alloy-version": "1.1",
 	"min-titanium-version":"2.1",
 	"tags":"",
-	"platforms":"android,ios,mobileweb,blackberry"
+	"platforms":"android,ios"
 }

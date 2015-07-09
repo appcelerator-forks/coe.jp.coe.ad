@@ -4,114 +4,113 @@
 @requires ti.admob
 @requires net.nend
  */
-var TAG, args, createNend, isTablet, makeAdmob, makeAdmobView;
 
-args = arguments[0] || {};
+(function() {
+  var TAG, args, createNend, isTablet, makeAdmob, makeAdmobView;
 
-$.adview.applyProperties(args);
+  args = arguments[0] || {};
 
-TAG = "jp.coe.ad ";
+  $.adview.applyProperties(args);
 
-makeAdmobView = function(obj) {
-  var Admob, ad;
-  console.log(TAG + " makeAdmobView");
-  Admob = require("ti.admob");
-  if (obj.adUnitId == null) {
-    obj.adUnitId = Alloy.CFG.publisherId;
-  }
-  Ti.API.debug("obj.publisherId " + obj.adUnitId);
-  console.debug((TAG + " ") + JSON.stringify(obj));
-  ad = Admob.createView(obj);
-  ad.addEventListener('didReceiveAd', function() {
-    console.debug('Did receive ad!');
-  });
-  ad.addEventListener('didFailToReceiveAd', function() {
-    console.debug('Failed to receive ad!');
-  });
-  ad.addEventListener('willPresentScreen', function() {
-    console.debug('Presenting screen!');
-  });
-  ad.addEventListener('willDismissScreen', function() {
-    console.debug('Dismissing screen!');
-  });
-  ad.addEventListener('didDismissScreen', function() {
-    console.debug('Dismissed screen!');
-  });
-  ad.addEventListener('willLeaveApplication', function() {
-    console.debug('Leaving the app!');
-  });
-  return ad;
-};
+  TAG = "jp.coe.ad ";
 
-makeAdmob = function(obj, tmpadview) {
-  var admobview;
-  console.log(TAG + " makeAdmob");
-  if (tmpadview != null) {
-    $.adview.remove(tmpadview);
-  }
-  admobview = makeAdmobView(obj);
-  return $.adview.add(admobview);
-};
-
-createNend = function(obj) {
-  var ad, adView;
-  console.log(TAG + " createNend");
-  ad = require("net.nend");
-  if (obj.nendId != null) {
-    obj.apiKey = obj.nendId;
-  }
-  adView = ad.createView(obj);
-  adView.addEventListener("receive", function(e) {
-    return Ti.API.info("nend receive");
-  });
-  adView.addEventListener("error", function(e) {
-    if (!ENV_PRODUCTION) {
-      Ti.API.debug("nendエラー " + e);
+  makeAdmobView = function(obj) {
+    var Admob, ad;
+    console.log(TAG + " makeAdmobView");
+    Admob = require("ti.admob");
+    if (obj.adUnitId == null) {
+      obj.adUnitId = Alloy.CFG.publisherId;
     }
-    Ti.API.debug("nendエラー " + e);
-    return makeAdmob(obj, adView);
-  });
-  adView.addEventListener("click", function(e) {
-    return Ti.API.info("nend click");
-  });
-  return adView;
-};
+    Ti.API.debug("obj.publisherId " + obj.adUnitId);
+    console.debug((TAG + " ") + JSON.stringify(obj));
+    ad = Admob.createView(obj);
+    ad.addEventListener('didReceiveAd', function() {
+      console.debug('Did receive ad!');
+    });
+    ad.addEventListener('didFailToReceiveAd', function() {
+      console.debug('Failed to receive ad!');
+    });
+    ad.addEventListener('willPresentScreen', function() {
+      console.debug('Presenting screen!');
+    });
+    ad.addEventListener('willDismissScreen', function() {
+      console.debug('Dismissing screen!');
+    });
+    ad.addEventListener('didDismissScreen', function() {
+      console.debug('Dismissed screen!');
+    });
+    ad.addEventListener('willLeaveApplication', function() {
+      console.debug('Leaving the app!');
+    });
+    return ad;
+  };
+
+  makeAdmob = function(obj, tmpadview) {
+    var admobview;
+    console.log(TAG + " makeAdmob");
+    if (tmpadview != null) {
+      $.adview.remove(tmpadview);
+    }
+    admobview = makeAdmobView(obj);
+    return $.adview.add(admobview);
+  };
+
+  createNend = function(obj) {
+    var ad, adView;
+    console.log(TAG + " createNend");
+    ad = require("net.nend");
+    if (obj.nendId != null) {
+      obj.apiKey = obj.nendId;
+    }
+    adView = ad.createView(obj);
+    adView.addEventListener("receive", function(e) {
+      return Ti.API.info("nend receive");
+    });
+    adView.addEventListener("error", function(e) {
+      if (!ENV_PRODUCTION) {
+        Ti.API.debug("nendエラー " + e);
+      }
+      Ti.API.debug("nendエラー " + e);
+      return makeAdmob(obj, adView);
+    });
+    adView.addEventListener("click", function(e) {
+      return Ti.API.info("nend click");
+    });
+    return adView;
+  };
 
 
-/**
-@deplicate
- */
+  /**
+  @deplicate
+   */
 
-isTablet = function() {
-  return Alloy.isTablet;
-};
+  isTablet = function() {
+    return Alloy.isTablet;
+  };
 
-exports.isTablet = isTablet;
+  exports.isTablet = isTablet;
 
-exports.setBottom = function() {
-  return $.adview.bottom = 0;
-};
+  exports.setBottom = function() {
+    return $.adview.bottom = 0;
+  };
 
-exports.setTop = function() {
-  return $.adview.top = 0;
-};
+  exports.setTop = function() {
+    return $.adview.top = 0;
+  };
 
-exports.init = function(obj, isAd) {
-  var adview, is_tablet, tmpadview;
-  if (isAd == null) {
-    isAd = true;
-  }
-  console.log(TAG + " init");
-  is_tablet = Alloy.isTablet;
-  if (obj == null) {
-    obj = is_tablet ? _.extend(Alloy.CFG.tablet, Alloy.CFG.ad_tablet) : _.extend(Alloy.CFG.phone, Alloy.CFG.ad_phone);
-  }
-  $.adview.height = Alloy.isTablet ? 90 : 50;
-  $.adview.width = Alloy.isTablet ? 720 : 320;
-  adview = null;
-  if (false) {
-    $.adview.add(createNend(obj));
-  } else {
+  exports.init = function(obj, isAd) {
+    var adview, is_tablet, tmpadview;
+    if (isAd == null) {
+      isAd = true;
+    }
+    console.log(TAG + " init");
+    is_tablet = Alloy.isTablet;
+    if (obj == null) {
+      obj = is_tablet ? _.extend(Alloy.CFG.tablet, Alloy.CFG.ad_tablet) : _.extend(Alloy.CFG.phone, Alloy.CFG.ad_phone);
+    }
+    $.adview.height = Alloy.isTablet ? 90 : 50;
+    $.adview.width = Alloy.isTablet ? 720 : 320;
+    adview = null;
     if (Ti.UI.iOS != null) {
       tmpadview = Ti.UI.iOS.createAdView({
         zIndex: 1000
@@ -125,6 +124,9 @@ exports.init = function(obj, isAd) {
       adview = makeAdmobView(obj);
       $.adview.add(adview);
     }
-  }
-  return obj;
-};
+    return obj;
+  };
+
+}).call(this);
+
+//# sourceMappingURL=widget.js.map

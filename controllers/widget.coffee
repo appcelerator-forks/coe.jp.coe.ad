@@ -99,23 +99,19 @@ exports.init = (obj,isAd=on)->
   # $.adview.top = obj.top if obj.top?
   #obj.width = $.adview.width
   adview = null
-  
-  #日本だったらnend AndroidでタブレットだったらAdmob
-  if no #Titanium.Locale.getCurrentCountry() is "JP" and !(OS_ANDROID and is_tablet)
-    $.adview.add createNend obj
-  else
-    #iOSだったらiAdとadmob
-    if Ti.UI.iOS?
-      tmpadview = Ti.UI.iOS.createAdView
-        zIndex: 1000
-        
-      tmpadview.addEventListener 'error', (e)-> 
-        Ti.API.error "AdView error"
-        makeAdmob(obj,tmpadview)
 
-      $.adview.add tmpadview
-    else if Ti.Android?
-      adview = makeAdmobView obj
-        
-      $.adview.add adview
+  #iOSだったらiAdとadmob
+  if Ti.UI.iOS?
+    tmpadview = Ti.UI.iOS.createAdView
+      zIndex: 1000
+      
+    tmpadview.addEventListener 'error', (e)-> 
+      Ti.API.error "AdView error"
+      makeAdmob(obj,tmpadview)
+
+    $.adview.add tmpadview
+  else if Ti.Android?
+    adview = makeAdmobView obj
+      
+    $.adview.add adview
   obj
